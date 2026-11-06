@@ -1,0 +1,17 @@
+{
+  "name": "playwright-resilient-portal-bot",
+  "version": "1.0.0",
+  "description": "A local Playwright demo for CSV form entry, HTTP 500 retry recovery, and verified table exports.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.6"
+  },
+  "scripts": {
+    "start": "node run.mjs",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "playwright-core": "^1.62.1"
+  }
+}
