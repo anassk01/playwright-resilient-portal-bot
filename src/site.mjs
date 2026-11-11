@@ -84,6 +84,11 @@ export async function startSite({ port = 0, failFirstPosts = 1 } = {}) {
 
     if (route === '/orders/new' && req.method === 'POST') {
       const form = await readForm(req);
+      // The injected failures happen before a row is written.
+      if (failuresLeft > 0) {
+        failuresLeft -= 1;
+        return send(res, 500, page('Order service error', '<p class="message error">HTTP 500. Order service is busy.</p>'));
+      }
       const order = {
         id: orders.length + 1,
         customer: form.get('customer'),
