@@ -145,9 +145,23 @@ async function run({
           if (report.entered.length === 1) await shot('saved');
           break;
         }
-    }
-    }
 
+        const status = resp?.status() ?? null;
+        const serverError = status >= 500 && status < 600;
+        const reason = resp?.ok() ? 'Save confirmation missing' : status ? 'HTTP ' + status : 'No navigation response';
+        log('Order ' + (index + 1) + ' attempt ' + attempt + ' failed. ' + reason);
+        await shot(serverError ? 'server-error' : 'order-rejected');
+        if (!serverError || attempt > maxRetries) {
+          report.failed.push({ ...row, attempts: attempt, status, reason });
+          break;
+        }
+
+        const delay = Math.min(30000, retryBaseMs * 2 ** Math.min(attempt - 1, 30));
+        report.retries += 1;
+        log('Retrying in ' + delay + ' ms');
+        await sleep(delay);
+      }
+    }
   } catch (error) {
     report.error = error.message;
     log('Error. ' + error.message);
