@@ -26,6 +26,24 @@ async function readInput(inputFile) {
   });
 }
 
+function tableOrder([id, customer, email, product, qty]) {
+  return { id: Number(id), customer, email, product, qty: Number(qty) };
+}
+
+async function writeExports(outDir, orders) {
+  const csvPath = join(outDir, 'export.csv');
+  const jsonPath = join(outDir, 'export.json');
+  await Promise.all([
+    writeFile(csvPath, serializeCsv([TABLE_FIELDS, ...orders.map((row) => TABLE_FIELDS.map((field) => row[field]))])),
+    writeFile(jsonPath, JSON.stringify(orders, null, 2) + '\n'),
+  ]);
+  const [csv, json] = await Promise.all([readFile(csvPath, 'utf8'), readFile(jsonPath, 'utf8')]);
+  const [header, ...csvRows] = parseCsv(csv);
+  return isDeepStrictEqual(header, TABLE_FIELDS)
+    && csvRows.every((row) => row.length === TABLE_FIELDS.length)
+    && isDeepStrictEqual(csvRows.map(tableOrder), JSON.parse(json));
+}
+
 async function prepareOutput(outDir, shotDir) {
   await mkdir(shotDir, { recursive: true });
   const oldShots = (await readdir(shotDir)).filter((name) =>
@@ -162,6 +180,31 @@ async function run({
         await sleep(delay);
       }
     }
+
+    const rows = [];
+    let tableUrl = ordersUrl;
+    const visited = new Set();
+    while (tableUrl) {
+      if (visited.has(tableUrl)) throw new Error('Orders pagination returned a page twice');
+      visited.add(tableUrl);
+      const table = await page.goto(tableUrl);
+      if (!table?.ok() || page.url() !== tableUrl) throw new Error('Could not load an orders table page');
+      const body = page.locator('table tbody');
+      await body.waitFor();
+      const pageRows = await body.locator('tr').evaluateAll((trs) =>
+        trs.map((tr) => Array.from(tr.cells, (cell) => cell.textContent)));
+      rows.push(...pageRows.map(tableOrder));
+      report.pages += 1;
+      await shot('table-page-' + report.pages);
+      log('Read table page ' + report.pages + ' (' + rows.length + ' rows so far)');
+      const next = page.locator('a[rel=next]');
+      const href = await next.count() ? await next.getAttribute('href') : null;
+      tableUrl = href ? new URL(href, tableUrl).href : null;
+    }
+
+    report.exported = rows.length;
+    report.siteCount = site.orders.length;
+    report.checks.csvAndJsonMatch = await writeExports(outDir, rows);
   } catch (error) {
     report.error = error.message;
     log('Error. ' + error.message);
