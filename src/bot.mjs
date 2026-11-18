@@ -44,6 +44,38 @@ async function writeExports(outDir, orders) {
     && isDeepStrictEqual(csvRows.map(tableOrder), JSON.parse(json));
 }
 
+async function writeReports(outDir, report) {
+  const markdown = [
+    '# Run report',
+    '',
+    'Result: **' + (report.ok ? 'PASS' : 'FAIL') + '**',
+    '',
+    '- Orders entered: ' + report.entered.length + '/' + report.inputCount,
+    '- Retries after server errors: ' + report.retries,
+    '- Failed orders: ' + report.failed.length,
+    '- Seeded orders: ' + report.seeded,
+    '- Orders in portal: ' + report.siteCount,
+    '- Rows exported: ' + report.exported,
+    '- Table pages read: ' + report.pages,
+    ...(report.error ? ['- Error: ' + report.error] : []),
+    '',
+    '## Verification',
+    '',
+    '| Check | Result |',
+    '| --- | --- |',
+    ...Object.entries(report.checks).map(([name, passed]) => '| `' + name + '` | ' + (passed ? 'PASS' : 'FAIL') + ' |'),
+    '',
+    '## Log',
+    '',
+    ...report.log.map((line) => '- ' + line),
+    '',
+  ].join('\n');
+  await Promise.all([
+    writeFile(join(outDir, 'report.json'), JSON.stringify(report, null, 2) + '\n'),
+    writeFile(join(outDir, 'report.md'), markdown),
+  ]);
+}
+
 async function prepareOutput(outDir, shotDir) {
   await mkdir(shotDir, { recursive: true });
   const oldShots = (await readdir(shotDir)).filter((name) =>
@@ -205,6 +237,15 @@ async function run({
     report.exported = rows.length;
     report.siteCount = site.orders.length;
     report.checks.csvAndJsonMatch = await writeExports(outDir, rows);
+    report.checks.allOrdersEntered = report.entered.length === input.length && report.failed.length === 0;
+    report.checks.exportMatchesSite = rows.length === report.seeded + report.entered.length
+      && isDeepStrictEqual(rows, site.orders);
+    const rowsById = new Map(rows.map((row) => [row.id, row]));
+    const savedIds = new Set(report.entered.map((row) => row.id));
+    report.checks.newOrdersInExport = report.checks.allOrdersEntered && savedIds.size === input.length
+      && report.entered.every(({ attempts, confirmation, ...order }) =>
+        order.id > report.seeded && isDeepStrictEqual(rowsById.get(order.id), order));
+    log('Wrote export.csv and export.json (' + rows.length + ' rows each)');
   } catch (error) {
     report.error = error.message;
     log('Error. ' + error.message);
