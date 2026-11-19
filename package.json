@@ -4,11 +4,19 @@
   "description": "A local Playwright demo for CSV form entry, HTTP 500 retry recovery, and verified table exports.",
   "type": "module",
   "license": "MIT",
+  "author": "Anass Kabil <contact@pullmesh.com>",
+  "homepage": "https://github.com/anassk01/playwright-resilient-portal-bot",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anassk01/playwright-resilient-portal-bot.git"
+  },
   "engines": {
     "node": ">=20.6"
   },
   "scripts": {
     "start": "node run.mjs",
+    "demo:fail": "node -e \"process.env.FAIL_FIRST = '5'; import('./run.mjs')\"",
+    "demo:bad-auth": "node -e \"process.env.DEMO_PASS = 'wrong'; import('./run.mjs')\"",
     "test": "node --test"
   },
   "dependencies": {

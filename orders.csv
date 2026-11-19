@@ -1,0 +1,7 @@
+customer,email,product,qty
+Fixture Customer 01,order01@orders.example.com,Standing desk,2
+Fixture Customer 02,order02@orders.example.com,Monitor arm,4
+Fixture Customer 03,order03@orders.example.com,Desk lamp,1
+Fixture Customer 04,order04@orders.example.com,Office chair,3
+Fixture Customer 05,order05@orders.example.com,Cable tray,6
+"Fixture Customer 06, ""Receiving""",order06@orders.example.com,Desk lamp,2
