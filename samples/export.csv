@@ -1,0 +1,25 @@
+id,customer,email,product,qty
+1,Seed Customer 1,seed1@orders.example.com,Desk lamp,1
+2,Seed Customer 2,seed2@orders.example.com,Monitor arm,2
+3,Seed Customer 3,seed3@orders.example.com,Cable tray,3
+4,Seed Customer 4,seed4@orders.example.com,Desk lamp,4
+5,Seed Customer 5,seed5@orders.example.com,Monitor arm,5
+6,Seed Customer 6,seed6@orders.example.com,Cable tray,1
+7,Seed Customer 7,seed7@orders.example.com,Desk lamp,2
+8,Seed Customer 8,seed8@orders.example.com,Monitor arm,3
+9,Seed Customer 9,seed9@orders.example.com,Cable tray,4
+10,Seed Customer 10,seed10@orders.example.com,Desk lamp,5
+11,Seed Customer 11,seed11@orders.example.com,Monitor arm,1
+12,Seed Customer 12,seed12@orders.example.com,Cable tray,2
+13,Seed Customer 13,seed13@orders.example.com,Desk lamp,3
+14,Seed Customer 14,seed14@orders.example.com,Monitor arm,4
+15,Seed Customer 15,seed15@orders.example.com,Cable tray,5
+16,Seed Customer 16,seed16@orders.example.com,Desk lamp,1
+17,Seed Customer 17,seed17@orders.example.com,Monitor arm,2
+18,Seed Customer 18,seed18@orders.example.com,Cable tray,3
+19,Fixture Customer 01,order01@orders.example.com,Standing desk,2
+20,Fixture Customer 02,order02@orders.example.com,Monitor arm,4
+21,Fixture Customer 03,order03@orders.example.com,Desk lamp,1
+22,Fixture Customer 04,order04@orders.example.com,Office chair,3
+23,Fixture Customer 05,order05@orders.example.com,Cable tray,6
+24,"Fixture Customer 06, ""Receiving""",order06@orders.example.com,Desk lamp,2

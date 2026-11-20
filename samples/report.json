@@ -1,0 +1,99 @@
+{
+  "startedAt": "2026-11-23T17:21:24.812Z",
+  "inputCount": 6,
+  "seeded": 18,
+  "siteCount": 24,
+  "exported": 24,
+  "pages": 3,
+  "entered": [
+    {
+      "customer": "Fixture Customer 01",
+      "email": "order01@orders.example.com",
+      "product": "Standing desk",
+      "qty": 2,
+      "id": 19,
+      "attempts": 2,
+      "confirmation": "Order #19 saved for Fixture Customer 01"
+    },
+    {
+      "customer": "Fixture Customer 02",
+      "email": "order02@orders.example.com",
+      "product": "Monitor arm",
+      "qty": 4,
+      "id": 20,
+      "attempts": 1,
+      "confirmation": "Order #20 saved for Fixture Customer 02"
+    },
+    {
+      "customer": "Fixture Customer 03",
+      "email": "order03@orders.example.com",
+      "product": "Desk lamp",
+      "qty": 1,
+      "id": 21,
+      "attempts": 1,
+      "confirmation": "Order #21 saved for Fixture Customer 03"
+    },
+    {
+      "customer": "Fixture Customer 04",
+      "email": "order04@orders.example.com",
+      "product": "Office chair",
+      "qty": 3,
+      "id": 22,
+      "attempts": 1,
+      "confirmation": "Order #22 saved for Fixture Customer 04"
+    },
+    {
+      "customer": "Fixture Customer 05",
+      "email": "order05@orders.example.com",
+      "product": "Cable tray",
+      "qty": 6,
+      "id": 23,
+      "attempts": 1,
+      "confirmation": "Order #23 saved for Fixture Customer 05"
+    },
+    {
+      "customer": "Fixture Customer 06, \"Receiving\"",
+      "email": "order06@orders.example.com",
+      "product": "Desk lamp",
+      "qty": 2,
+      "id": 24,
+      "attempts": 1,
+      "confirmation": "Order #24 saved for Fixture Customer 06, \"Receiving\""
+    }
+  ],
+  "failed": [],
+  "retries": 1,
+  "screenshots": [
+    "shots/01-login.png",
+    "shots/02-form-filled.png",
+    "shots/03-server-error.png",
+    "shots/04-saved.png",
+    "shots/05-table-page-1.png",
+    "shots/06-table-page-2.png",
+    "shots/07-table-page-3.png"
+  ],
+  "checks": {
+    "allOrdersEntered": true,
+    "exportMatchesSite": true,
+    "newOrdersInExport": true,
+    "csvAndJsonMatch": true
+  },
+  "log": [
+    "Signed in",
+    "Order 1 attempt 1 failed. HTTP 500",
+    "Retrying in 250 ms",
+    "Order 1/6 saved as #19 on attempt 2",
+    "Order 2/6 saved as #20 on attempt 1",
+    "Order 3/6 saved as #21 on attempt 1",
+    "Order 4/6 saved as #22 on attempt 1",
+    "Order 5/6 saved as #23 on attempt 1",
+    "Order 6/6 saved as #24 on attempt 1",
+    "Read table page 1 (10 rows so far)",
+    "Read table page 2 (20 rows so far)",
+    "Read table page 3 (24 rows so far)",
+    "Wrote export.csv and export.json (24 rows each)",
+    "PASS"
+  ],
+  "finishedAt": "2026-11-23T17:21:27.962Z",
+  "ok": true
+}
