@@ -70,3 +70,9 @@ The report checks that every input order was confirmed, that the scraped table m
 
 The test suite covers quoted CSV fields, recovery after one HTTP 500, partial output after exhausting retries, and the sign-in failure screen.
 
+Built by [PullMesh](https://pullmesh.com/services/). Technical write-ups on [DEV.to (`anasbuilds997`)](https://dev.to/anasbuilds997).
+
+### Companion Open-Source Repositories
+
+- [`anassk01/agent-writeguard`](https://github.com/anassk01/agent-writeguard) — Zero-dependency dry-run attestation, atomic `O_EXCL` locks, read-back verification, and kill switches for AI agents
+- [`anassk01/camoufox-browser-use`](https://github.com/anassk01/camoufox-browser-use) — CDP-free Firefox/Camoufox Playwright backend for `browser-use`
