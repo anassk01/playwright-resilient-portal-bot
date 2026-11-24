@@ -4,6 +4,8 @@ Enter six orders from CSV through a local browser form, recover from an injected
 
 The demo portal listens on `127.0.0.1`, starts with 18 synthetic orders, and resets each run. The same workflow fits authorized internal portals, admin forms, and test sites.
 
+![Playwright Trace Viewer showing the first submission returning HTTP 500 and the retry returning HTTP 200](samples/retry-trace.webp)
+
 ```mermaid
 flowchart TD
   A["Read orders.csv and sign in"] --> B["Submit next order"]
@@ -32,6 +34,15 @@ npm start
 npm test
 ```
 
+### Inspect the retry
+
+```sh
+TRACE=1 npm start
+npx playwright-core show-trace out/trace.zip
+```
+
+Open the Network tab and filter for `/orders/new`. The first POST returns 500 and its retry returns 200. The screenshot uses the bundled sample orders.
+
 ### Try the failure modes
 
 | Command | What happens | Exit |
@@ -53,6 +64,7 @@ The first retry waits 250 ms by default and the second waits 500 ms. The wait do
 | `RETRY_BASE_MS` | `250` | Delay in milliseconds before the first retry. |
 | `HEADLESS` | `true` | Set to `false` or `0` to watch Chromium. |
 | `OUT_DIR` | `out/` | Output directory. Relative paths resolve from the working directory. |
+| `TRACE` | Off | Set to `1` to save a local Playwright trace in the output directory. |
 
 Copy `.env.example` to `.env` and run `node --env-file=.env run.mjs` to load the example settings from a file. Use a different `OUT_DIR` for each concurrent run or to keep earlier results.
 

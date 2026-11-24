@@ -9,7 +9,7 @@ import { DEMO_PASS, DEMO_USER, ORDER_FIELDS, PRODUCTS, TABLE_FIELDS, startSite }
 
 const DEFAULT_INPUT = new URL('../orders.csv', import.meta.url);
 const DEFAULT_OUT = fileURLToPath(new URL('../out', import.meta.url));
-const ARTIFACTS = ['export.csv', 'export.json', 'report.json', 'report.md'];
+const ARTIFACTS = ['export.csv', 'export.json', 'report.json', 'report.md', 'trace.zip'];
 
 async function readInput(inputFile) {
   const [header, ...rows] = parseCsv(await readFile(inputFile, 'utf8'));
@@ -108,6 +108,7 @@ async function run({
   maxRetries = 2,
   retryBaseMs = 250,
   headless = true,
+  trace = false,
 } = {}) {
   const shotDir = join(outDir, 'shots');
   await prepareOutput(outDir, shotDir);
@@ -134,6 +135,7 @@ async function run({
   let site;
   let browser;
   let page;
+  let tracing;
   const log = (message) => report.log.push(message);
   const shot = async (name) => {
     const number = String(report.screenshots.length + 1).padStart(2, '0');
@@ -155,6 +157,11 @@ async function run({
     report.seeded = site.orders.length;
     browser = await chromium.launch({ headless });
     page = await browser.newPage({ viewport: { width: 1100, height: 760 } });
+    if (trace) {
+      const pageTracing = page.context().tracing;
+      await pageTracing.start({ screenshots: true, snapshots: true });
+      tracing = pageTracing;
+    }
     page.setDefaultTimeout(5000);
     page.setDefaultNavigationTimeout(5000);
 
@@ -254,6 +261,12 @@ async function run({
     }
   } finally {
     if (site) report.siteCount = site.orders.length;
+    if (tracing) {
+      await tracing.stop({ path: join(outDir, 'trace.zip') }).catch((error) => {
+        report.error ??= error.message;
+        log('Could not save browser trace. ' + error.message);
+      });
+    }
     const cleanup = await Promise.allSettled([
       browser?.close(),
       site && new Promise((resolveClose, rejectClose) => {
