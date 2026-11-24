@@ -74,5 +74,4 @@ Built by [PullMesh](https://pullmesh.com/services/). Technical write-ups on [DEV
 
 ### Companion Open-Source Repositories
 
-- [`anassk01/agent-writeguard`](https://github.com/anassk01/agent-writeguard) — Zero-dependency dry-run attestation, atomic `O_EXCL` locks, read-back verification, and kill switches for AI agents
 - [`anassk01/camoufox-browser-use`](https://github.com/anassk01/camoufox-browser-use) — CDP-free Firefox/Camoufox Playwright backend for `browser-use`
